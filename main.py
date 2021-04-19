@@ -75,15 +75,19 @@ async def on_message(message):
 
   if msg.startswith("//setup"):
     if message.author.top_role.permissions.administrator:
-      await message.channel.send("Setting up the bot can be done in a few simple steps:\n1: In order to receive daily updates on the winning class, leaderboard, and strike modifiers, use \"//channel set <#channel>\" in order to choose the channel that you want these updates to appear in.\nShould you ever want to turn these messages off, use \"//channel disable <#channel>\" to disable it.\n\n2:This bot can change the colors of roles to reflect the color of the in-game class item. In order to set this up, create 3 roles with the names \"Titan\", \"Hunter\", and \"Warlock\".\nYou can assign these roles to members yourself or by using a bot like yagpdb.xyz to do this for you with a rolemenu. These roles will change between bronze/silver/gold on a daily basis.\n**MAKE SURE THAT THE GUARDIAN GAMES MASTER BOT IS ABOVE THESE 3 CLASS ROLES TO MAKE SURE THE BOT CAN CHANGE THESE COLORS.**\n\nTo see what else this bot can do, use //help")
+      await message.channel.send("Setting up the bot can be done in a few simple steps:\n1: In order to receive daily updates on the winning class, leaderboard, and strike modifiers, use \"//channel set #channel\" in order to choose the channel that you want these updates to appear in.\nShould you ever want to turn these messages off, use \"//channel disable #channel\" to disable it.\n\n2:This bot can change the colors of roles to reflect the color of the in-game class item. In order to set this up, create 3 roles with the names \"Titan\", \"Hunter\", and \"Warlock\".\nYou can assign these roles to members yourself or by using a bot like yagpdb.xyz to do this for you with a rolemenu. These roles will change between bronze/silver/gold on a daily basis.\n**MAKE SURE THAT THE GUARDIAN GAMES MASTER BOT IS ABOVE THESE 3 CLASS ROLES TO MAKE SURE THE BOT CAN CHANGE THESE COLORS.**\n\nTo see what else this bot can do, use //help")
       return
     else:
       await message.channel.send("You don't have permission to do that. Only members with the administrator permission can set up the bot")
   
-  if msg.startswith("//channel set "):
+  if msg.startswith("//channel set <#"):
     if message.author.top_role.permissions.administrator:
       msg = msg.split("//channel set <#", 1)[1]
       msg = msg.split(">", 1)[0]
+      if msg in db["ChannelID"]:
+        await message.channel.send("This is already an active channel. Use //channel disable #channel to disable it.")
+        return
+
       db["ServerID"].append(message.guild.id)
       db["ChannelID"].append(int(msg))
       channel = client.get_channel(int(msg))
@@ -91,6 +95,10 @@ async def on_message(message):
       return
     else:
       await message.channel.send("You don't have permission to do that. Only members with the administrator permission can set up the bot")
+      return
+  elif msg.startswith("//channel set"):
+    await message.channel.send("Make sure to tag the channel correctly in order to set it up.")
+    return
   
   if msg.startswith("//channel disable "):
     if message.author.top_role.permissions.administrator:
