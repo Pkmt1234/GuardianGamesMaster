@@ -56,7 +56,7 @@ async def on_ready():
   if "resultsmessage" not in db.keys():
     db["resultsmessage"] = ""
   
-  await client.change_presence(activity=discord.Game('Waiting for the games...'))
+  await client.change_presence(activity=discord.Game('//setup to set up the bot!'))
 
 @client.event
 async def on_guild_join(guild):
