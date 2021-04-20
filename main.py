@@ -61,6 +61,7 @@ async def on_ready():
 @client.event
 async def on_guild_join(guild):
   await guild.system_channel.send("Thank you for using the Guardian Games Master bot!\nThis bot will give daily updates on the games, including a bunch of other fun stats. In order to help you set up the bot, use //setup.\nUse //help to get all info on other commands")
+  print("Joined Server")
 
             
 
@@ -92,6 +93,7 @@ async def on_message(message):
       db["ChannelID"].append(int(msg))
       channel = client.get_channel(int(msg))
       await message.channel.send("<#" + str(channel.id) + "> has been set. This channel will receive all Guardian Games updates!")
+      print("Channel added " + str(channel.id))
       return
     else:
       await message.channel.send("You don't have permission to do that. Only members with the administrator permission can set up the bot")
@@ -105,10 +107,10 @@ async def on_message(message):
       msg = msg.split("//channel disable <#", 1)[1]
       msg = msg.split(">", 1)[0]
       for index, channel in enumerate(db["ChannelID"]):
-        print(channel)
         if msg == str(channel):
           await message.channel.send("This channel will no longer receive daily Guardian Games updates.")
           del db["ChannelID"][index]
+          print("Channel removed " + str(channel))
           return
       return
     else:
@@ -354,19 +356,24 @@ async def on_message(message):
         for channel in guild.text_channels:
           for id in db["ChannelID"]:
             if id == channel.id:
-              
-              await channel.send(db["resultsmessage"])
-              await message.channel.send("Message sent")
+              try:
+                await channel.send(db["resultsmessage"])
+                await message.channel.send("Message sent")
+              except:
+                await message.channel.send("Message failed")
       
       for guild in client.guilds:
         for role in guild.roles:
-          if str(role.name) == (db["firstplace"][:-1]):
-            await role.edit(color=0xFFD700)
-          if str(role.name) == (db["secondplace"][:-1]):
-            await role.edit(color=0xC0C0C0)
-          if str(role.name) == (db["thirdplace"][:-1]):
-            await role.edit(color=0xCD7F32)
-          return
+          try:
+            if str(role.name) == (db["firstplace"][:-1]):
+              await role.edit(color=0xFFD700)
+            if str(role.name) == (db["secondplace"][:-1]):
+              await role.edit(color=0xC0C0C0)
+            if str(role.name) == (db["thirdplace"][:-1]):
+              await role.edit(color=0xCD7F32)
+          except:
+                await message.channel.send("Role change failed")
+          
 
     if msg.startswith("//onlypushhere"):
       await message.channel.send(db["resultsmessage"])
@@ -377,9 +384,11 @@ async def on_message(message):
         for channel in guild.text_channels:
           for id in db["ChannelID"]:
             if id == channel.id:
-              
-              await channel.send(msg.split("//pushmessage ", 1)[1])
-              await message.channel.send("Message sent")
+              try:
+                await channel.send(msg.split("//pushmessage ", 1)[1])
+                await message.channel.send("Message sent")
+              except:
+                await message.channel.send("Message failed")
       
 
 
