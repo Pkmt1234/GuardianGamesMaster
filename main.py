@@ -82,25 +82,30 @@ async def on_message(message):
       await message.channel.send("You don't have permission to do that. Only members with the administrator permission can set up the bot")
   
   if msg.startswith("//channel set <#"):
-    if message.author.top_role.permissions.administrator:
-      msg = msg.split("//channel set <#", 1)[1]
-      msg = msg.split(">", 1)[0]
-      if msg in db["ChannelID"]:
-        await message.channel.send("This is already an active channel. Use //channel disable #channel to disable it.")
-        return
+    try:
+      if message.author.top_role.permissions.administrator:
+        msg = msg.split("//channel set <#", 1)[1]
+        msg = msg.split(">", 1)[0]
+        if msg in db["ChannelID"]:
+          await message.channel.send("This is already an active channel. Use //channel disable #channel to disable it.")
+          return
 
-      db["ServerID"].append(message.guild.id)
-      db["ChannelID"].append(int(msg))
-      channel = client.get_channel(int(msg))
-      await message.channel.send("<#" + str(channel.id) + "> has been set. This channel will receive all Guardian Games updates!")
-      print("Channel added " + str(channel.id))
-      return
-    else:
-      await message.channel.send("You don't have permission to do that. Only members with the administrator permission can set up the bot")
-      return
-  elif msg.startswith("//channel set"):
-    await message.channel.send("Make sure to tag the channel correctly in order to set it up.")
-    return
+        db["ServerID"].append(message.guild.id)
+        db["ChannelID"].append(int(msg))
+        channel = client.get_channel(int(msg))
+        await message.channel.send("<#" + str(channel.id) + "> has been set. This channel will receive all Guardian Games updates!")
+        print("Channel added " + str(channel.id))
+        return
+      else:
+        await message.channel.send("You don't have permission to do that. Only members with the administrator permission can set up the bot")
+        return
+    except:
+      if message.author.top_role.permissions.administrator:
+        await message.channel.send("Make sure to tag the channel correctly in order to set it up.")
+        return
+      else:
+        await message.channel.send("You don't have permission to do that. Only members with the administrator permission can set up the bot")
+        return
   
   if msg.startswith("//channel disable "):
     if message.author.top_role.permissions.administrator:
