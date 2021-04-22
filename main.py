@@ -414,6 +414,23 @@ async def on_message(message):
       db["Hsilver"] = 0
       db["Hbronze"] = 0
       return
+    
+    if msg.startswith("//roleupdate"):
+      for guild in client.guilds:
+        for role in guild.roles:
+          try:
+            if str(role.name) == (db["firstplace"][:-1]):
+              await role.edit(color=0xFFD700)
+              print("Role Update Success")
+            if str(role.name) == (db["secondplace"][:-1]):
+              await role.edit(color=0xC0C0C0)
+              print("Role Update Success")
+            if str(role.name) == (db["thirdplace"][:-1]):
+              await role.edit(color=0xCD7F32)
+              print("Role Update Success")
+            
+          except:
+                print("Role Update Failed")
   
   if msg.startswith("//leaderboard"):
     resultsmessage = "**__Guardian Games 2021 Leaderboard:__**\n\n"
@@ -493,7 +510,7 @@ async def on_message(message):
   
   if msg.startswith("//modifiers"):
       resultsmessage = ""
-      await message.channel.send("The first day of Guardian Games hasn't ended, so there are no daily modifiers yet. Be patient Guardian!")
+      #await message.channel.send("The first day of Guardian Games hasn't ended, so there are no daily modifiers yet. Be patient Guardian!")
 
       goldmodifier = "-Health, shields, and recovery are increased\n-Kinetic weapons deal more damage."
       silvermodifier = "-Melee abilities recharge faster.\n-Elemental damage increased from Guardian sources.\n-More Heavy ammo available."
@@ -577,10 +594,8 @@ async def on_message(message):
       return
   
   if msg.startswith("//results"):
-    #await message.channel.send("Yesterday's final standings were as follows:\n\n:first_place:: **" + db["firstplace"] + "**\n:second_place:: **" + 
-    #db["secondplace"] + "**\n:third_place:: **" + db["thirdplace"] + "**")
-
-    await message.channel.send("There are no results from the first day yet. Be patient Guardian!")
+    await message.channel.send("Yesterday's final standings were as follows:\n\n:first_place:: **" + db["firstplace"] + "**\n:second_place:: **" + 
+    db["secondplace"] + "**\n:third_place:: **" + db["thirdplace"] + "**")
     return
       
 
