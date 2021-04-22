@@ -373,7 +373,7 @@ async def on_message(message):
             if str(role.name) == (db["firstplace"][:-1]):
               await role.edit(color=0xFFD700)
             if str(role.name) == (db["secondplace"][:-1]):
-              await role.edit(color=0xC0C0C0)
+              await role.edit(color=0xaaa9ad)
             if str(role.name) == (db["thirdplace"][:-1]):
               await role.edit(color=0xCD7F32)
           except:
@@ -423,7 +423,7 @@ async def on_message(message):
               await role.edit(color=0xFFD700)
               print("Role Update Success")
             if str(role.name) == (db["secondplace"][:-1]):
-              await role.edit(color=0xC0C0C0)
+              await role.edit(color=0xaaa9ad)
               print("Role Update Success")
             if str(role.name) == (db["thirdplace"][:-1]):
               await role.edit(color=0xCD7F32)
